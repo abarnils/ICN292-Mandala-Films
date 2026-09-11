@@ -2,7 +2,7 @@
 
 Sistema de Información para la Gestión de proyectos audiovisuales — Productora Audiovisual Mandala Films Ltda.
 
-Proyecto de la asignatura *ICN292 — Sistemas de Información para la Gestión (2026-2)*, Universidad Técnica Federico Santa María, Campus Vitacura. Entrega 1 (E1): diagnóstico, requerimientos y diseño preliminar.
+Proyecto de la asignatura *ICN292 — Sistemas de Información para la Gestión (2026-2)*, Universidad Técnica Federico Santa María, Campus Vitacura. Entrega 1: diagnóstico, requerimientos y diseño preliminar.
 
 # La PYME y el Problema
 Mandala Films es una pequeña productora audiovisual ubicada en Providencia dedicada a producción de películas, videos y programas de televisión.
