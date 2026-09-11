@@ -34,4 +34,4 @@ Agustín Barnils / 202360650-2 / Responsable Parte B y C (PYME/problema y requer
 Paula Daroch / xxxxxxxxx-x / xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
 Catalina Jofre / xxxxxxxxx-x / xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
 Antar Pizarro / 202260576-6 / Responsable parte F (Arquitectura lógica y stack)<br>
-Antonella Dagnino / xxxxxxxxx-x / xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+Antonella Dagnino / 202210025-7 / Responsable parte E datos preliminar<br>
