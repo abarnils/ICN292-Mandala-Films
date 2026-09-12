@@ -31,7 +31,7 @@ Esta entrega define el diseño (problema, requerimientos, procesos y modelo de d
 # Equipo
 
 Agustín Barnils / 202360650-2 / Responsable Parte B y C (PYME/problema y requerimientos)<br>
-Paula Daroch / xxxxxxxxx-x / xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+Paula Daroch / 202266510-6 / Responsable Modelo As-Is y Parte G.<br>
 Catalina Jofre / xxxxxxxxx-x / xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
 Antar Pizarro / 202260576-6 / Responsable parte F (Arquitectura lógica y stack)<br>
 Antonella Dagnino / 202210025-7 / Responsable parte E datos preliminar<br>
