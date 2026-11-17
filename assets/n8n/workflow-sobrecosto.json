@@ -1,0 +1,637 @@
+{
+  "name": "ICN292-E2-sobrecosto",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sobrecosto",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "505ae29f-53ad-4eed-850e-cb1962a0dd07",
+      "name": "Webhook",
+      "webhookId": "ef422214-0978-4669-9ae7-3d5be5c0f684"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "18fc9352-a2c5-4e3e-9d7a-4459b8733031",
+              "name": "porcentaje_ejecutado",
+              "value": "={{ (Number($('Webhook').item.json.body.gasto_acumulado) + Number($('Webhook').item.json.body.monto)) / Number($('Webhook').item.json.body.presupuesto_aprobado) * 100 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        0
+      ],
+      "id": "48d1ac81-b9f3-4116-931e-00275811e774",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.presupuesto_aprobado }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lte"
+                    },
+                    "id": "d07ac582-8516-490e-aecf-8ea34666b78e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "INVALIDO_PRESUPUESTO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "c3c61e40-513b-48db-8604-104c0cf791e4",
+                    "leftValue": "={{ $json.body.monto }}",
+                    "rightValue": 0,
+                    "operator": {
+                      "type": "number",
+                      "operation": "lte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "INVALIDO_MONTO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "73d78f42-e8d5-48db-b1f3-18512cda6670",
+                    "leftValue": "={{ $json.porcentaje_ejecutado }}",
+                    "rightValue": 100,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "SUPERADO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "66776e01-3ea3-4cc3-b6f3-7f85e99319e6",
+                    "leftValue": "={{ $json.porcentaje_ejecutado }}",
+                    "rightValue": 80,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gte"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CERCA"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "OK"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        416,
+        0
+      ],
+      "id": "64cca76a-3088-49fe-ac52-e854f223fd7d",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21c2ded8-2161-48af-b113-d71024a28888",
+              "name": "estado",
+              "value": "INVALIDO",
+              "type": "string"
+            },
+            {
+              "id": "2e3cbe97-0454-454c-98fd-bc328f9d2d31",
+              "name": "=fecha",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "140a7931-3c2a-4860-8891-ae8c4cf602a3",
+              "name": "=mensaje",
+              "value": "=Datos invalidos en el gasto del proyecto {{ $json.body.id_proyecto }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -192
+      ],
+      "id": "99fbd25a-d296-4fb8-a35d-6ff25cbdc551",
+      "name": "EF INVALIDO"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21c2ded8-2161-48af-b113-d71024a28888",
+              "name": "estado",
+              "value": "SUPERADO",
+              "type": "string"
+            },
+            {
+              "id": "2e3cbe97-0454-454c-98fd-bc328f9d2d31",
+              "name": "=fecha",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "140a7931-3c2a-4860-8891-ae8c4cf602a3",
+              "name": "=mensaje",
+              "value": "=Proyecto {{ $json.body.id_proyecto }} supero el presupuesto: {{ Number($json.porcentaje_ejecutado).toFixed(1) }}% ejecutado",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -64
+      ],
+      "id": "e281977b-5e1c-400f-9792-ac918990ecb8",
+      "name": "EF SUPERADO"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21c2ded8-2161-48af-b113-d71024a28888",
+              "name": "estado",
+              "value": "CERCA",
+              "type": "string"
+            },
+            {
+              "id": "2e3cbe97-0454-454c-98fd-bc328f9d2d31",
+              "name": "=fecha",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "140a7931-3c2a-4860-8891-ae8c4cf602a3",
+              "name": "=mensaje",
+              "value": "=Proyecto {{ $json.body.id_proyecto }} esta cerca del presupuesto: {{ Number($json.porcentaje_ejecutado).toFixed(1) }}% ejecutado",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        64
+      ],
+      "id": "eb26abf6-f15a-4e26-a781-f22d01ac4281",
+      "name": "EF CERCA"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21c2ded8-2161-48af-b113-d71024a28888",
+              "name": "estado",
+              "value": "OK",
+              "type": "string"
+            },
+            {
+              "id": "2e3cbe97-0454-454c-98fd-bc328f9d2d31",
+              "name": "=fecha",
+              "value": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}",
+              "type": "string"
+            },
+            {
+              "id": "140a7931-3c2a-4860-8891-ae8c4cf602a3",
+              "name": "=mensaje",
+              "value": "=Proyecto {{ $json.body.id_proyecto }} dentro del presupuesto: {{ Number($json.porcentaje_ejecutado).toFixed(1) }}% ejecutado",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        192
+      ],
+      "id": "0a62a0b2-9fab-4eb8-8bac-099d54f0f425",
+      "name": "EF OK"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1zMl3zsD_tbkhzFIXIC8TKlH_NZGIwUGuXkJCEGCVkwI",
+          "mode": "list",
+          "cachedResultName": "registro_sobrecosto",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zMl3zsD_tbkhzFIXIC8TKlH_NZGIwUGuXkJCEGCVkwI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1zMl3zsD_tbkhzFIXIC8TKlH_NZGIwUGuXkJCEGCVkwI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "fecha": "={{ $json.fecha }}",
+            "id_proyecto": "={{ $json.body.id_proyecto }}",
+            "categoria": "={{ $json.body.categoria }}",
+            "monto": "={{ $json.body.monto }}",
+            "presupuesto_aprobado": "={{ $json.body.presupuesto_aprobado }}",
+            "gasto_acumulado": "={{ $json.body.gasto_acumulado }}",
+            "procentaje_ejecutado": "={{ $json.porcentaje_ejecutado }}",
+            "estado": "={{ $json.estado }}",
+            "mensaje": "={{ $json.mensaje }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "fecha",
+              "displayName": "fecha",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id_proyecto",
+              "displayName": "id_proyecto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "categoria",
+              "displayName": "categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "monto",
+              "displayName": "monto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "presupuesto_aprobado",
+              "displayName": "presupuesto_aprobado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gasto_acumulado",
+              "displayName": "gasto_acumulado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "procentaje_ejecutado",
+              "displayName": "procentaje_ejecutado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estado",
+              "displayName": "estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "mensaje",
+              "displayName": "mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1104,
+        16
+      ],
+      "id": "2fcbffe6-6e31-4aa5-a592-596d497495bc",
+      "name": "Registro",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "XVFTSZ2EvCx583uu",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://webhook.site/3c03ab14-c423-4ceb-b2f1-aed02b46fbd5",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ estado: $json.estado, mensaje: $json.mensaje, proyecto: $json.body.id_proyecto }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1104,
+        -144
+      ],
+      "id": "266761ee-0cea-41d5-b9f4-ecf1b09ee36e",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1104,
+        176
+      ],
+      "id": "4c50d95c-c4f7-4286-a2ed-6bb1cf1c0e41",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "EF INVALIDO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "EF INVALIDO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "EF SUPERADO",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "EF CERCA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "EF OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EF CERCA": {
+      "main": [
+        [
+          {
+            "node": "Registro",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EF SUPERADO": {
+      "main": [
+        [
+          {
+            "node": "Registro",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EF INVALIDO": {
+      "main": [
+        [
+          {
+            "node": "Registro",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EF OK": {
+      "main": [
+        [
+          {
+            "node": "Registro",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registro": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "89fb23fb-f279-43d6-a093-92d30708bc40",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "044dff70e8a88f22e084ea6340acb4e23cd207e8322175a7d06ce22ed58d7936"
+  },
+  "nodeGroups": [],
+  "id": "VjxMzPP1fyjZqtPl",
+  "tags": []
+}

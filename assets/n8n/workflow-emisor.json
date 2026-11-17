@@ -1,0 +1,92 @@
+{
+  "name": "ICN292-E2-emisor-sobrecosto",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9da2f99d-5408-4544-92f5-2ae206d4213c",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "const casos = [\n  { id_caso: \"S01\", id_proyecto: \"PRY-001\", categoria: \"bencina\", monto: 50000, presupuesto_aprobado: 1000000, gasto_acumulado: 300000 },\n  { id_caso: \"S02\", id_proyecto: \"PRY-001\", categoria: \"colaciones\", monto: 100000, presupuesto_aprobado: 1000000, gasto_acumulado: 700000 },\n  { id_caso: \"S03\", id_proyecto: \"PRY-001\", categoria: \"arriendo\", monto: 100000, presupuesto_aprobado: 1000000, gasto_acumulado: 900000 },\n  { id_caso: \"S04\", id_proyecto: \"PRY-001\", categoria: \"arriendo\", monto: 150000, presupuesto_aprobado: 1000000, gasto_acumulado: 950000 },\n  { id_caso: \"S05\", id_proyecto: \"PRY-002\", categoria: \"bencina\", monto: 30000, presupuesto_aprobado: 0, gasto_acumulado: 0 },\n  { id_caso: \"S06\", id_proyecto: \"PRY-002\", categoria: \"bencina\", monto: -5000, presupuesto_aprobado: 800000, gasto_acumulado: 100000 },\n  { id_caso: \"S07\", id_proyecto: \"PRY-001\", categoria: \"arriendo\", monto: 50000, presupuesto_aprobado: 1000000 }\n];\nreturn casos.map(c => ({ json: c }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "1bbfe740-e050-4c82-9ad1-c7f77e1bdd8c",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://entrega2.app.n8n.cloud/webhook/sobrecosto",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 3000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        448,
+        0
+      ],
+      "id": "4b926632-b78a-4919-b5b1-01b6e4181536",
+      "name": "HTTP Request",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "7eeb6966-e19d-4603-a33a-28b3bc59501f",
+  "meta": {
+    "instanceId": "044dff70e8a88f22e084ea6340acb4e23cd207e8322175a7d06ce22ed58d7936"
+  },
+  "nodeGroups": [],
+  "id": "9flfmd8mnStEpI3a",
+  "tags": []
+}
