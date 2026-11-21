@@ -24,6 +24,12 @@ README.md
 CHANGELOG.md
 DECLARACION\\\\\\\_IA.md
 
+assets
+  n8n/
+  consultas.sql
+  ...
+```
+
 docs/
   00-caso-pyme.md
   01-requerimientos.md
@@ -31,16 +37,16 @@ docs/
   03-modelo-datos.md
   04-sql-consultas.md
   05-automatizacion-n8n.md
+  Presentación-Proyecto-...pdf
 
 db/
   schema.sql
   seed.sql
 
-presentation/
-  ...
-
 informe/
   ...
+  ICN292_P100_E2_Barnils_Daroch_Jofre_Pizarro_Dagnino.pdf
+  latex/
 ```
 
 ## Requisitos previos
